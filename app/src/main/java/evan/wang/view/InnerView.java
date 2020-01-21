@@ -10,10 +10,14 @@ import android.graphics.Path;
 import android.graphics.Point;
 import android.graphics.Rect;
 import android.graphics.RectF;
+import android.graphics.Typeface;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
+import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RelativeLayout;
 
 import evan.wang.R;
 
@@ -35,7 +39,7 @@ public class InnerView extends View {
     private Point pointRightBottm = null;
     private boolean hasInit = false;
     private InnerViewBuilder innerViewBuilder;
-    public static final int DEFAULT_COLOR = R.color.colorAccent;
+    public static final int DEFAULT_COLOR = R.color.common_red_color;
     public static final int DEFAULT_BORDER = 10;
 
     public InnerView(Context context, InnerViewBuilder innerViewBuilder) {
@@ -63,6 +67,7 @@ public class InnerView extends View {
         super.onDraw(canvas);
 
         if (outSideView != null && hasInit){
+            path.reset();
             rectF.left = 0;
             rectF.top = 0;
             rectF.right = width;
@@ -79,8 +84,40 @@ public class InnerView extends View {
     }
 
     @Override
+    public void layout(int l, int t, int r, int b) {
+        super.layout(l, t, r, b);
+    }
+
+    @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+        setMeasuredDimension(measureWidth((int) width), measureHeight((int) height));
+
+    }
+
+    private int measureWidth(int measureSpec){
+        int specMode = MeasureSpec.getMode(measureSpec);
+        int specSize = MeasureSpec.getSize(measureSpec);
+        //设置一个默认值，就是这个View的默认宽度为500，这个看我们自定义View的要求
+        int result = (int) width;
+        if (specMode == MeasureSpec.AT_MOST) {//相当于我们设置为wrap_content
+            result = specSize;
+        } else if (specMode == MeasureSpec.EXACTLY) {//相当于我们设置为match_parent或者为一个具体的值
+            result = specSize;
+        }
+        return result;
+    }
+
+    private int measureHeight(int measureSpec) {
+        int specMode = MeasureSpec.getMode(measureSpec);
+        int specSize = MeasureSpec.getSize(measureSpec);
+        int result = (int) height;
+        if (specMode == MeasureSpec.AT_MOST) {
+            result = specSize;
+        } else if (specMode == MeasureSpec.EXACTLY) {
+            result = specSize;
+        }
+        return result;
     }
 
     /**
@@ -117,7 +154,7 @@ public class InnerView extends View {
             width = array.getDimension(R.styleable.InnerView_inner_width, 100);
             height = array.getDimension(R.styleable.InnerView_inner_height, 100);
             borderWidth = array.getDimension(R.styleable.InnerView_inner_border_width, 2);
-            borderColor = array.getColor(R.styleable.InnerView_inner_border_width, getContext().getResources().getColor(R.color.colorAccent));
+            borderColor = array.getColor(R.styleable.InnerView_inner_border_width, (DEFAULT_COLOR));
             array.recycle();
             initPaint();
             initSize();
@@ -132,8 +169,9 @@ public class InnerView extends View {
     private void initPaint(){
         paint = new Paint();
         paint.setAntiAlias(true);
-        paint.setColor(borderColor);
+        paint.setColor(getResources().getColor(borderColor));
         paint.setStrokeWidth(borderWidth);
+        paint.setStyle(Paint.Style.STROKE);
         path = new Path();
     }
 
@@ -205,8 +243,9 @@ public class InnerView extends View {
             if (this.borderWidth <= 0){
                 this.borderWidth = DEFAULT_BORDER;
             }
-
-            return new InnerView(this.context, this);
+            InnerView innerView = new InnerView(this.context, this);
+            ((RelativeLayout)outSideView.getParent()).addView(innerView);
+            return innerView;
         }
 
     }

@@ -52,7 +52,7 @@
         android:layout_weight="1"
         app:clipBorderWidth="2dp"
         app:clipType="rectangle"
-        app:mHorizontalPadding="30dp"
+        app:mHorizontalPadding="0dp"
         android:visibility="gone"
         />
 

@@ -232,6 +232,9 @@ public class ClipViewLayout extends RelativeLayout {
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
+        float beginX = event.getX();
+        float beginY = event.getY();
+//        if (beginX > clipView.getIn)
         switch (event.getAction() & MotionEvent.ACTION_MASK) {
             case MotionEvent.ACTION_DOWN:
                 savedMatrix.set(matrix);
@@ -516,22 +519,27 @@ public class ClipViewLayout extends RelativeLayout {
         return newBmp;
     }
 
+
     @Override
     protected void onLayout(boolean changed, int l, int t, int r, int b) {
         int childCount = getChildCount();
         int clipViewTop = 0;
+        super.onLayout(changed, l, t, r, b);
         for (int i = 0; i < childCount; i++){
             View childView = getChildAt(i);
             if (childView instanceof ClipView){
-                childView.layout(l, t, r, b);
-                clipViewTop = childView.getTop();
-            }else if (childView instanceof InnerView){
-                int left = (this.getWidth() - 50) / 2;
-                int right = (this.getWidth() + 50) / 2;
-                int bottom = clipViewTop + 50;
-                childView.layout(left, clipViewTop, right, bottom);
-            }else {
-                childView.layout(l, t, r, b);
+                Rect rect = ((ClipView)childView).getClipRect();
+                if (rect != null) {
+                    clipViewTop = rect.top;
+                }
+            }
+            else if (childView instanceof InnerView && clipViewTop > 0){
+                //getMeasuredWidth的值来自于InnerView的onMeasure方法
+                int left = (this.getWidth() - childView.getMeasuredWidth()) / 2;
+                int right = (this.getWidth() + childView.getMeasuredHeight()) / 2;
+                int bottom = clipViewTop + clipView.getMeasuredHeight();
+                childView.layout(left, clipViewTop + 2, right, bottom);
+                break;
             }
         }
     }

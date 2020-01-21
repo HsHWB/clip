@@ -36,6 +36,8 @@ public class ClipView extends View {
     private int clipRadiusWidth;
     private InnerView innerView;
 
+    private Rect clipRect = new Rect();
+
     //裁剪框矩形宽度
     private int clipWidth;
     //裁剪框类别，（圆形、矩形），默认为圆形
@@ -69,12 +71,11 @@ public class ClipView extends View {
                     innerView = new InnerView.InnerViewBuilder(getContext())
                             .setCanMove(false)
                             .setOutSideView(ClipView.this)
-                            .setWidth(100)
-                            .setHeight(100)
+                            .setWidth(getClipRect().height())
+                            .setHeight(getClipRect().height())
                             .setBorderWidth(5)
-                            .setBorderColor(R.color.colorAccent)
+                            .setBorderColor(R.color.common_red_color)
                             .create();
-                    ((RelativeLayout)ClipView.this.getParent()).addView(innerView);
                     Log.d("ClipView", "onGlobalLayout innerView");
                 }
                 ClipView.this.getViewTreeObserver().removeOnGlobalLayoutListener(this);
@@ -113,8 +114,9 @@ public class ClipView extends View {
             canvas.drawRect(mHorizontalPadding, beginY,
                     rectangleWidth - mHorizontalPadding, beginY + rectangleHeight , paint);
             //绘制白色的矩形边框
-            canvas.drawRect(mHorizontalPadding, beginY,
-                    rectangleWidth - mHorizontalPadding, beginY + rectangleHeight, borderPaint);
+            clipRect.set((int)mHorizontalPadding, beginY,
+                    (int)(rectangleWidth - mHorizontalPadding), beginY + rectangleHeight);
+            canvas.drawRect(clipRect, borderPaint);
         }
         //出栈，恢复到之前的图层，意味着新建的图层会被删除，新建图层上的内容会被绘制到canvas (or the previous layer)
         canvas.restore();
