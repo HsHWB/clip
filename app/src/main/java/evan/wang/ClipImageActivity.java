@@ -50,6 +50,8 @@ public class ClipImageActivity extends AppCompatActivity implements View.OnClick
         back.setOnClickListener(this);
         btnCancel.setOnClickListener(this);
         btnOk.setOnClickListener(this);
+        //设置图片资源
+        clipViewLayout2.setImageSrc(getIntent().getData());
     }
 
     @Override
@@ -58,13 +60,13 @@ public class ClipImageActivity extends AppCompatActivity implements View.OnClick
         if (type == 1) {
             clipViewLayout1.setVisibility(View.VISIBLE);
             clipViewLayout2.setVisibility(View.GONE);
-            //设置图片资源
-            clipViewLayout1.setImageSrc(getIntent().getData());
+//            //设置图片资源
+//            clipViewLayout1.setImageSrc(getIntent().getData());
         } else {
             clipViewLayout2.setVisibility(View.VISIBLE);
             clipViewLayout1.setVisibility(View.GONE);
-            //设置图片资源
-            clipViewLayout2.setImageSrc(getIntent().getData());
+//            //设置图片资源
+//            clipViewLayout2.setImageSrc(getIntent().getData());
         }
     }
 

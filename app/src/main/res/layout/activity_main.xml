@@ -8,7 +8,8 @@
         android:id="@+id/qqLayout"
         android:layout_width="match_parent"
         android:layout_height="120dp"
-        android:background="#e5e5e5">
+        android:background="#e5e5e5"
+        android:visibility="gone">
 
         <TextView
             android:id="@+id/text1"
@@ -51,18 +52,18 @@
             android:layout_alignParentLeft="true"
             android:layout_centerVertical="true"
             android:layout_marginLeft="20dp"
-            android:text="2、仿微信头像上传"
+            android:text="头像上传"
             android:textColor="#173070"
             android:textSize="16sp" />
 
         <ImageView
             android:id="@+id/head_image2"
-            android:layout_width="80dp"
+            android:layout_width="142dp"
             android:layout_height="80dp"
             android:layout_centerVertical="true"
             android:layout_alignParentRight="true"
             android:layout_marginRight="50dp"
-            android:src="@drawable/wechat" />
+            android:src="@mipmap/ic_launcher" />
     </RelativeLayout>
 
 </LinearLayout>

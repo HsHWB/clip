@@ -414,7 +414,7 @@ public class ClipViewLayout extends RelativeLayout {
         Bitmap zoomedCropBitmap = null;
         try {
             cropBitmap = Bitmap.createBitmap(imageView.getDrawingCache(), rect.left, rect.top, rect.width(), rect.height());
-            zoomedCropBitmap = zoomBitmap(cropBitmap, 200, 200);
+            zoomedCropBitmap = zoomBitmap(cropBitmap, 640, 360);
         } catch (Exception e) {
             e.printStackTrace();
         }
